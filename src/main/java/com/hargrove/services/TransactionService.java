@@ -2,13 +2,25 @@ package com.hargrove.services;
 
 import com.hargrove.dao.TransactionDAO;
 import com.hargrove.enums.TransactionCategory;
+import com.hargrove.models.CheckingAccount;
 import com.hargrove.models.Transaction;
 import java.time.Instant;
+import java.util.List;
 import java.util.UUID;
 
 public class TransactionService {
     TransactionDAO dao;
     CheckingAccountService checkingService;
+
+    public List<Transaction> get(String userID) {
+        checkingService = new CheckingAccountService();
+        CheckingAccount checkingAccount = checkingService.getAccount(UUID.fromString(userID));
+
+        dao = new TransactionDAO();
+        List<Transaction> transactions = dao.queryTransactions(checkingAccount.getAccountNumber());
+
+        return  transactions;
+    }
 
     public void create(Transaction transaction) {
         // originAccountNumber == null.  Get from database.

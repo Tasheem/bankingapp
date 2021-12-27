@@ -13,18 +13,40 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.UriInfo;
 
+import java.util.List;
 import java.util.UUID;
 
 @Path("transaction")
 public class TransactionResource {
     TransactionService service;
 
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Transaction> getTransactions(@Context HttpServletResponse response,
+                                             @Context ContainerRequestContext cr) {
+        response.addHeader("Access-Control-Allow-Origin", "*");
+        response.addHeader("Access-Control-Allow-Methods", "GET");
+        response.addHeader("Access-Control-Allow-Headers", "Content-Type");
+
+        // Received From AuthorizationFilter
+        String userID = (String) cr.getProperty("userID");
+        System.out.println("USER ID: " + userID);
+
+        if(userID == null || userID.equals(""))
+            return null;
+
+        service = new TransactionService();
+        List<Transaction> transactions = service.get(userID);
+
+        return transactions;
+    }
+
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response createTransaction(Transaction transaction, @Context UriInfo uriInfo,
                                       @Context HttpServletResponse response, @Context ContainerRequestContext cr) {
-        response.addHeader("Access-Control-Allow-Origin", "http://127.0.0.1:5500");
+        response.addHeader("Access-Control-Allow-Origin", "*");
         response.addHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
         response.addHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
 
@@ -51,7 +73,7 @@ public class TransactionResource {
 
     @OPTIONS
     public void preflightResponse(@Context HttpServletResponse response) {
-        response.addHeader("Access-Control-Allow-Origin", "http://127.0.0.1:5500");
+        response.addHeader("Access-Control-Allow-Origin", "*");
         response.addHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
         response.addHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
         System.out.println("CheckingAccountResource: Preflight Endpoint Reached.");

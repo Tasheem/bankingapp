@@ -5,6 +5,7 @@ import com.hargrove.models.CheckingAccount;
 import com.hargrove.services.CheckingAccountService;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.ws.rs.*;
+import jakarta.ws.rs.container.ContainerRequestContext;
 import jakarta.ws.rs.core.*;
 import java.math.BigDecimal;
 import java.net.URI;
@@ -15,7 +16,7 @@ import java.util.UUID;
 public class CheckingAccountResource {
     CheckingAccountService service;
 
-    @GET
+    /*@GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<CheckingAccount> getChecking(@Context HttpServletResponse response) {
         response.addHeader("Access-Control-Allow-Origin", "*");
@@ -26,6 +27,27 @@ public class CheckingAccountResource {
         List<CheckingAccount> accounts = service.getAllAccounts();
 
         return accounts;
+    }*/
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public CheckingAccount getChecking(@Context HttpServletResponse response, @Context ContainerRequestContext cr) {
+        response.addHeader("Access-Control-Allow-Origin", "*");
+        response.addHeader("Access-Control-Allow-Methods", "GET");
+        response.addHeader("Access-Control-Allow-Headers", "Content-Type");
+
+        // Received From AuthorizationFilter
+        String userID = (String) cr.getProperty("userID");
+        System.out.println("USER ID: " + userID);
+
+        if(userID == null || userID.equals(""))
+            return null;
+
+        service = new CheckingAccountService();
+        /*List<CheckingAccount> accounts = service.getAllAccounts();*/
+        CheckingAccount account = service.getAccount(UUID.fromString(userID));
+
+        return account;
     }
 
     // TODO: Change this endpoint to accept query string paramaters.
@@ -61,7 +83,7 @@ public class CheckingAccountResource {
 
     @OPTIONS
     public void preflightResponse(@Context HttpServletResponse response) {
-        response.addHeader("Access-Control-Allow-Origin", "http://127.0.0.1:5500");
+        response.addHeader("Access-Control-Allow-Origin", "*");
         response.addHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
         response.addHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
         System.out.println("CheckingAccountResource: Preflight Endpoint Reached.");

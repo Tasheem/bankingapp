@@ -7,7 +7,7 @@ public class AuthenticationUtil extends SecurityUtil{
     public AuthenticationUtil constructEndpoints() {
         /*
          * Populating list from parent class.
-         * Format ---> Path:Method|role1,role2,role3
+         * Format ---> Path:Method|role1,role2,role3,...,roleN
          * Example ---> http://localhost:8080/bankingapp/api/user:PUT|ROLE_ADMIN,ROLE_CUSTOMER
          */
         SECURED_ENDPOINTS.add(PATH_USER + ":" + HttpMethod.GET + "|" + super.ROLE_ADMIN);
@@ -18,6 +18,8 @@ public class AuthenticationUtil extends SecurityUtil{
         SECURED_ENDPOINTS.add(PATH_CHECKING + ":" + HttpMethod.POST + "|" + super.ROLE_BANKER + "," + super.ROLE_ADMIN);
         SECURED_ENDPOINTS.add(PATH_CHECKING + ":" + HttpMethod.GET + "|" + super.ROLE_ADMIN);
         SECURED_ENDPOINTS.add(PATH_TRANSACTION + ":" + HttpMethod.POST + "|" + super.ROLE_CUSTOMER + ","
+                + super.ROLE_BANKER + "," + super.ROLE_ADMIN);
+        SECURED_ENDPOINTS.add(PATH_TRANSACTION + ":" + HttpMethod.GET + "|" + super.ROLE_CUSTOMER + ","
                 + super.ROLE_BANKER + "," + super.ROLE_ADMIN);
 
         return this;
