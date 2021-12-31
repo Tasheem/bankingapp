@@ -24,7 +24,7 @@ public class UserResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<User> getUser(@Context HttpServletResponse response) {
+    public List<User> getAllUsers(@Context HttpServletResponse response) {
         response.addHeader("Access-Control-Allow-Origin", "*");
         response.addHeader("Access-Control-Allow-Methods", "GET");
         response.addHeader("Access-Control-Allow-Credentials", "true");
@@ -34,6 +34,29 @@ public class UserResource {
         List<User> users = service.getAllUsers();
 
         return users;
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/individual")
+    public User getUser(@Context HttpServletResponse response, @Context ContainerRequestContext cr) {
+        response.addHeader("Access-Control-Allow-Origin", "*");
+        response.addHeader("Access-Control-Allow-Methods", "GET");
+        response.addHeader("Access-Control-Allow-Credentials", "true");
+        response.addHeader("Access-Control-Allow-Headers", "Content-Type");
+
+        service = new UserService();
+        // Received From AuthorizationFilter
+        String userID = (String) cr.getProperty("userID");
+        System.out.println("USER ID: " + userID);
+
+        if(userID == null || userID.equals(""))
+            return null;
+
+        User user = service.getUser(UUID.fromString(userID));
+        System.out.println("User: " + user.getFirstName());
+
+        return user;
     }
 
     @POST
@@ -168,5 +191,14 @@ public class UserResource {
         response.addHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
         response.addHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
         System.out.println("UserResource: Preflight Endpoint Reached.");
+    }
+
+    @Path("/individual")
+    @OPTIONS
+    public void preflightResponseIndividualUser(@Context HttpServletResponse response) {
+        response.addHeader("Access-Control-Allow-Origin", "*");
+        response.addHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+        response.addHeader("Access-Control-Allow-Methods", "GET");
+        System.out.println("UserResource --> Individual User: Preflight Endpoint Reached.");
     }
 }
