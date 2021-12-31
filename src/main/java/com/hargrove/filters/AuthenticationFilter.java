@@ -1,6 +1,7 @@
 package com.hargrove.filters;
 
 import com.hargrove.utilities.AuthenticationUtil;
+import com.hargrove.utilities.ErrorMessageJSON;
 import com.hargrove.utilities.JJWTAuthUtil;
 import com.hargrove.utilities.JwtUtil;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -63,7 +64,7 @@ public class AuthenticationFilter implements ContainerRequestFilter {
         } catch(ExpiredJwtException exp) {
             System.out.println("The expiration date has passed.");
             requestContext.abortWith(Response.status(401, "The Token Has Expired.")
-                    .header("Access-Control-Allow-Origin", "*").build());
+                    .header("Access-Control-Allow-Origin", "*").entity(new ErrorMessageJSON()).build());
         } catch (Exception e) {
             System.out.println("Invalid Token: " + token);
             System.out.println("Request Key: " + util.getKeyAsString());
