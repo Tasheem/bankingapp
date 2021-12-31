@@ -113,8 +113,12 @@ public class UserResource {
         System.out.println("Gender: " + filterBean.getGender());
         System.out.println("Preferred Pronoun: " + filterBean.getPreferredPronoun());
 
-        if(filterBean.getFirstName() != null)
+        if(filterBean.getFirstName() != null && filterBean.getLastName() != null)
             service.updateName(userID, filterBean.getFirstName(), filterBean.getLastName());
+        else if(filterBean.getFirstName() != null)
+            service.updateFirstName(userID, filterBean.getFirstName());
+        else if(filterBean.getLastName() != null)
+            service.updateLastName(userID, filterBean.getLastName());
         else if(filterBean.getPassword() != null) {
             User user = service.getUser(UUID.fromString(userID));
             if(!user.getUsername().equals(filterBean.getUsername())) {

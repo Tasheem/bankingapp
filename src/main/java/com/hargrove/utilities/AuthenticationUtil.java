@@ -18,7 +18,8 @@ public class AuthenticationUtil extends SecurityUtil{
                 super.ROLE_BANKER + "," + super.ROLE_CUSTOMER);
         SECURED_ENDPOINTS.add(PATH_ADMIN + ":" + HttpMethod.POST + "|" + super.ROLE_ADMIN);
         SECURED_ENDPOINTS.add(PATH_CHECKING + ":" + HttpMethod.POST + "|" + super.ROLE_BANKER + "," + super.ROLE_ADMIN);
-        SECURED_ENDPOINTS.add(PATH_CHECKING + ":" + HttpMethod.GET + "|" + super.ROLE_ADMIN);
+        SECURED_ENDPOINTS.add(PATH_CHECKING + ":" + HttpMethod.GET + "|" +  super.ROLE_CUSTOMER + ","
+                + super.ROLE_BANKER + "," + super.ROLE_ADMIN);
         SECURED_ENDPOINTS.add(PATH_TRANSACTION + ":" + HttpMethod.POST + "|" + super.ROLE_CUSTOMER + ","
                 + super.ROLE_BANKER + "," + super.ROLE_ADMIN);
         SECURED_ENDPOINTS.add(PATH_TRANSACTION + ":" + HttpMethod.GET + "|" + super.ROLE_CUSTOMER + ","

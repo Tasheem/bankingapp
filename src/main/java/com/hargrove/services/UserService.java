@@ -108,6 +108,16 @@ public class UserService {
         return deletionSuccessful;
     }
 
+    public void updateFirstName(String uuid, String firstName) {
+        db = new UserDAO();
+        db.updateFirstName(uuid, firstName);
+    }
+
+    public void updateLastName(String uuid, String lastName) {
+        db = new UserDAO();
+        db.updateLastName(uuid, lastName);
+    }
+
     public void updateName(String uuid, String firstName, String lastName) {
         db = new UserDAO();
         db.updateName(uuid, firstName, lastName);

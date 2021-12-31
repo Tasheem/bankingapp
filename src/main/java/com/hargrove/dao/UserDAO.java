@@ -248,6 +248,16 @@ public class UserDAO {
         }
     }
 
+    public void updateFirstName(String userID, String firstName) {
+        String update = String.format("UPDATE users SET first_name = \"%s\" WHERE id = \"%s\"", firstName, userID);
+        updateField(update);
+    }
+
+    public void updateLastName(String userID, String lastName) {
+        String update = String.format("UPDATE users SET last_name = \"%s\" WHERE id = \"%s\"", lastName, userID);
+        updateField(update);
+    }
+
     public void updateName(String userID, String firstName, String lastName) {
         String update = String.format("UPDATE users SET first_name = \"%s\", last_name = \"%s\"" +
                 " WHERE id = \"%s\"", firstName, lastName, userID);
