@@ -56,7 +56,7 @@ public class CheckingAccountResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response createChecking(@BeanParam CheckingFilterBean checkingParam, @Context UriInfo uriInfo,
                                    @Context HttpServletResponse response) {
-        response.addHeader("Access-Control-Allow-Origin", "http://127.0.0.1:5500");
+        response.addHeader("Access-Control-Allow-Origin", "*");
         response.addHeader("Access-Control-Allow-Headers", "Authorization");
         response.addHeader("Access-Control-Allow-Methods", "POST");
 
